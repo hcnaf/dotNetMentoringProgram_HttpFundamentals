@@ -19,7 +19,7 @@ namespace ConsoleListener
                 var response = context.Response;
 
                 var url = ParseRequest(request);
-                var responseString = GetResponse(url, response);
+                var responseString = GetResponse(url, request, response);
 
                 var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 response.ContentLength64 = buffer.Length;
@@ -42,12 +42,18 @@ namespace ConsoleListener
             return url[1..];
         }
 
-        private static string GetResponse(string[] url, HttpListenerResponse response)
+        private static string GetResponse(string[] url, HttpListenerRequest request, HttpListenerResponse response)
         {
             var method = url[0];
 
             if (method.Equals(AppSetttings.MyNameUrl, StringComparison.InvariantCultureIgnoreCase))
             {
+                if (url.Length < 2)
+                {
+                    response.StatusCode = 404;
+                    return "Name is empty.";
+                }
+
                 var name = HttpUtility.UrlDecode(url[1]);
                 response.StatusCode = 200;
                 return name;
@@ -76,6 +82,15 @@ namespace ConsoleListener
             {
                 response.StatusCode = 500;
                 return "Error on server";
+            }
+            if (method.Equals(AppSetttings.MyNameByHeaderUrl))
+            {
+                var nameFromHeader = request.Headers.Get(AppSetttings.NameHeader);
+                if (nameFromHeader is not null)
+                {
+                    response.StatusCode = 200;
+                    return nameFromHeader;
+                }
             }
 
             response.StatusCode = 404;

@@ -21,4 +21,13 @@ public class ConsoleClient
         var responseString = await response.Content.ReadAsStringAsync();
         Console.WriteLine(response.StatusCode + ": " + responseString);
     }
+
+    public async Task MyNameByHeader(string name)
+    {
+        _httpClient.DefaultRequestHeaders.Add(AppSetttings.NameHeader, name);
+        var response = await _httpClient.GetAsync($"http://localhost:8888/{AppSetttings.MyNameByHeaderUrl}");
+        _httpClient.DefaultRequestHeaders.Remove("X-MyName");
+        var responseString = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(response.StatusCode + ": Name from header - " + responseString);
+    }
 }

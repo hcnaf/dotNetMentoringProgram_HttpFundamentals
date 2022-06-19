@@ -9,5 +9,7 @@
         internal const string RedirectionUrl = "Redirection";
         internal const string ServerErrorUrl = "ServerError";
         internal const string SuccessUrl = "Success";
+        internal const string MyNameByHeaderUrl = "MyNameByHeader";
+        internal const string NameHeader = "X-MyName";
     }
 }
