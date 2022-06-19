@@ -8,5 +8,6 @@ await client.GetName("Test Username");
 //await client.GetStatus(AppSetttings.RedirectionUrl);
 //await client.GetStatus(AppSetttings.ClientErrorUrl);
 //await client.GetStatus(AppSetttings.ServerErrorUrl);
-await client.MyNameByHeader("Test UserName in header");
+//await client.MyNameByHeader("Test UserName in header");
+await client.MyNameByCookies("Test Username from cookies.");
 Console.ReadLine();

@@ -83,13 +83,24 @@ namespace ConsoleListener
                 response.StatusCode = 500;
                 return "Error on server";
             }
-            if (method.Equals(AppSetttings.MyNameByHeaderUrl))
+            if (method.Equals(AppSetttings.MyNameByHeaderUrl, StringComparison.InvariantCultureIgnoreCase))
             {
                 var nameFromHeader = request.Headers.Get(AppSetttings.NameHeader);
                 if (nameFromHeader is not null)
                 {
                     response.StatusCode = 200;
                     return nameFromHeader;
+                }
+            }
+            if (method.Equals(AppSetttings.MyNameByCookiesUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                var nameFromCookie = request.Cookies
+                    .FirstOrDefault(c => c.Name.Equals(AppSetttings.MyNameUrl, StringComparison.InvariantCultureIgnoreCase))?.Value;
+
+                if (nameFromCookie is not null)
+                {
+                    response.StatusCode = 200;
+                    return nameFromCookie;
                 }
             }
 

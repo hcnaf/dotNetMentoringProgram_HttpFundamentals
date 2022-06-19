@@ -11,5 +11,6 @@
         internal const string SuccessUrl = "Success";
         internal const string MyNameByHeaderUrl = "MyNameByHeader";
         internal const string NameHeader = "X-MyName";
+        internal const string MyNameByCookiesUrl = "MyNameByCookies";
     }
 }
