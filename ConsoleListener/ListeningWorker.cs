@@ -5,7 +5,6 @@ namespace ConsoleListener
 {
     public class ListeningWorker
     {
-        private const string MyNameMethod = "MyName";
         public async Task Start()
         {
             var listener = new HttpListener();
@@ -20,7 +19,7 @@ namespace ConsoleListener
                 var response = context.Response;
 
                 var url = ParseRequest(request);
-                var responseString = GetMyName(url);
+                var responseString = GetResponse(url, response);
 
                 var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
                 response.ContentLength64 = buffer.Length;
@@ -43,16 +42,43 @@ namespace ConsoleListener
             return url[1..];
         }
 
-        private static string GetMyName(string[] url)
+        private static string GetResponse(string[] url, HttpListenerResponse response)
         {
             var method = url[0];
 
-            if (method.Equals(MyNameMethod, StringComparison.InvariantCultureIgnoreCase))
+            if (method.Equals(AppSetttings.MyNameUrl, StringComparison.InvariantCultureIgnoreCase))
             {
                 var name = HttpUtility.UrlDecode(url[1]);
+                response.StatusCode = 200;
                 return name;
             }
+            if (method.Equals(AppSetttings.InformationUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.StatusCode = 100;
+                return "Info";
+            }
+            if (method.Equals(AppSetttings.SuccessUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.StatusCode = 200;
+                return "Success";
+            }
+            if (method.Equals(AppSetttings.RedirectionUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.StatusCode = 300;
+                return "Redirect";
+            }
+            if (method.Equals(AppSetttings.ClientErrorUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.StatusCode = 400;
+                return "Error on client";
+            }
+            if (method.Equals(AppSetttings.ServerErrorUrl, StringComparison.InvariantCultureIgnoreCase))
+            {
+                response.StatusCode = 500;
+                return "Error on server";
+            }
 
+            response.StatusCode = 404;
             return "Not found";
         }
     }
